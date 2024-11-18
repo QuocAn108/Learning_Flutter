@@ -12,7 +12,6 @@
 // "counter": 20,
 // "replay": 0
 // },
-import 'package:flutter/material.dart';
 
 class Songs {
   String id;
@@ -43,4 +42,9 @@ class Songs {
 
   @override
   int get hashCode => id.hashCode;
+
+  @override
+  String toString() {
+    return 'Songs{id: $id, title: $title, album: $album, artist: $artist, source: $source, image: $image, duration: $duration}';
+  }
 }
