@@ -1,19 +1,3 @@
-// {
-// "songs": [
-// {
-// "id": "1121429554",
-// "title": "Chạy Về Khóc Với Anh",
-// "album": "Chạy Về Khóc Với Anh(Single)",
-// "artist": "ERIK",
-// "source": "https://thantrieu.com/resources/music/1121429554.mp3",
-// "image": "https://thantrieu.com/resources/arts/1121429554.webp",
-// "duration": 224,
-// "favorite": "false",
-// "counter": 20,
-// "replay": 0
-// },
-import 'package:flutter/material.dart';
-
 class Songs {
   String id;
   String title;
@@ -43,4 +27,9 @@ class Songs {
 
   @override
   int get hashCode => id.hashCode;
+
+  @override
+  String toString() {
+    return 'Songs{id: $id, title: $title, album: $album, artist: $artist, source: $source, image: $image, duration: $duration}';
+  }
 }
