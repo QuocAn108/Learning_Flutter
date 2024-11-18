@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/services.dart';
 import 'package:music_app_flutter/Data/Model/song.dart';
 import 'package:http/http.dart' as http;
 
@@ -10,7 +11,7 @@ abstract interface class DataSource {
 class RemoteDataSource implements DataSource {
   @override
   Future<List<Songs>?> loadData() async {
-    const url = 'https://thantrieu.com/resources/braniumapis/songs.json';
+    const url = 'https://thantrieu.com/resources/braniumapis/songs.jsons';
     final uri = Uri.parse(url);
     final response = await http.get(uri);
     if (response.statusCode == 200) {
@@ -29,8 +30,11 @@ class RemoteDataSource implements DataSource {
 //flutter pub add http , command help receive data from internet
 class LocalDataSource implements DataSource {
   @override
-  Future<List<Songs>?> loadData() {
-    // TODO: implement loadData
-    throw UnimplementedError();
+  Future<List<Songs>?> loadData() async{
+    final String response = await rootBundle.loadString('assets/songs.json');
+    final jsonBody = jsonDecode(response) as Map;
+    final songList = jsonBody['songs'] as List;
+    List<Songs> songs = songList.map((song) => Songs.fromJson(song)).toList();
+    return songs;
   }
 }
