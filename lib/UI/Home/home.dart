@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:music_app_flutter/Data/Model/song.dart';
 import 'package:music_app_flutter/UI/Account/Account.dart';
 import 'package:music_app_flutter/UI/Discovery/Discovery.dart';
+import 'package:music_app_flutter/UI/Home/ViewModel.dart';
 import 'package:music_app_flutter/UI/Settings/Settings.dart';
 
 class MusicApp extends StatelessWidget {
@@ -46,9 +48,11 @@ class _MusicHomePageState extends State<MusicHomePage> {
           backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
           items: const [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-            BottomNavigationBarItem(icon: Icon(Icons.album), label: 'Discovery'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.album), label: 'Discovery'),
             BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Account'),
-            BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings')
+            BottomNavigationBarItem(
+                icon: Icon(Icons.settings), label: 'Settings')
           ],
         ),
         tabBuilder: (BuildContext, int index) {
@@ -64,10 +68,80 @@ class HomeTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text('Home Tab'),
-      ),
+    return HomeTabPage();
+  }
+}
+
+class HomeTabPage extends StatefulWidget {
+  const HomeTabPage({super.key});
+
+  @override
+  State<HomeTabPage> createState() => _HomeTabPageState();
+}
+
+class _HomeTabPageState extends State<HomeTabPage> {
+  List<Songs> songs = [];
+  late MusicAppViewModel _viewModel;
+
+  @override
+  void initState() {
+    _viewModel = MusicAppViewModel();
+    _viewModel.loadSong();
+    observeData();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: getBody(),
     );
+  }
+
+  Widget getBody() {
+    bool showLoading = songs.isEmpty;
+    if (showLoading) {
+      return getProgressBar();
+    } else {
+      return getListView();
+    }
+  }
+
+  Widget getProgressBar() {
+    return const Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+
+  ListView getListView() {
+    return ListView.separated(
+      itemBuilder: (context, position) {
+        return getRow(position);
+      },
+      separatorBuilder: (context, index) {
+        return const Divider(
+          color: Colors.grey,
+          thickness: 1,
+          indent: 24,
+          endIndent: 24,
+        );
+      },
+      itemCount: songs.length,
+      shrinkWrap: true,
+    );
+  }
+
+  Widget getRow(int index) {
+    return Center(
+      child: Text(songs[index].title),
+    );
+  }
+
+  void observeData() {
+    _viewModel.songStream.stream.listen((songList) {
+      setState(() {
+        songs.addAll(songList);
+      });
+    });
   }
 }
