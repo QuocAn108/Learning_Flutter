@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:music_app_flutter/Data/Model/song.dart';
-import 'package:music_app_flutter/UI/Account/Account.dart';
-import 'package:music_app_flutter/UI/Discovery/Discovery.dart';
-import 'package:music_app_flutter/UI/Home/ViewModel.dart';
-import 'package:music_app_flutter/UI/Now_Playing/Playing.dart';
-import 'package:music_app_flutter/UI/Settings/Settings.dart';
+import 'package:music_app_flutter/UI/Account/account.dart';
+import 'package:music_app_flutter/UI/Discovery/discovery.dart';
+import 'package:music_app_flutter/UI/Home/viewModel.dart';
+import 'package:music_app_flutter/UI/Now_Playing/playing.dart';
+import 'package:music_app_flutter/UI/Settings/settings.dart';
 
 class MusicApp extends StatelessWidget {
   const MusicApp({super.key});
