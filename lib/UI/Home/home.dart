@@ -4,6 +4,7 @@ import 'package:music_app_flutter/Data/Model/song.dart';
 import 'package:music_app_flutter/UI/Account/Account.dart';
 import 'package:music_app_flutter/UI/Discovery/Discovery.dart';
 import 'package:music_app_flutter/UI/Home/ViewModel.dart';
+import 'package:music_app_flutter/UI/Now_Playing/Playing.dart';
 import 'package:music_app_flutter/UI/Settings/Settings.dart';
 
 class MusicApp extends StatelessWidget {
@@ -17,7 +18,8 @@ class MusicApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: MusicHomePage(),
+      home: const MusicHomePage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -148,6 +150,40 @@ class _HomeTabPageState extends State<HomeTabPage> {
       });
     });
   }
+
+  void showBottomSheet() {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return ClipRRect(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+            child: Container(
+                height: 400,
+                color: Colors.grey,
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      const Text('Model Bottom Sheet'),
+                      ElevatedButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text('Close Bottom Sheet'))
+                    ],
+                  ), //to vertical, row() to horizontal
+                )),
+          );
+        });
+  }
+
+  void navigate(Songs song) {
+    Navigator.push(context, CupertinoPageRoute(builder: (context) {
+      return NowPlaying(
+        songs: songs,
+        playingSong: song,
+      );
+    }));
+  }
 }
 
 class _SongItemSection extends StatelessWidget {
@@ -181,7 +217,14 @@ class _SongItemSection extends StatelessWidget {
       ),
       title: Text(song.title),
       subtitle: Text(song.artist),
-      trailing: IconButton(onPressed: () {}, icon: Icon(Icons.more_horiz)),
+      trailing: IconButton(
+          onPressed: () {
+            parent.showBottomSheet();
+          },
+          icon: Icon(Icons.more_horiz)),
+      onTap: () {
+        parent.navigate(song);
+      },
     );
   }
 }
