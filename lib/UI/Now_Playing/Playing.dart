@@ -94,7 +94,7 @@ class _NowPlayingPageState extends State<NowPlayingPage>
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 64, bottom: 16),
+                  padding: const EdgeInsets.only(top: 4, bottom: 4),
                   child: SizedBox(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -147,14 +147,58 @@ class _NowPlayingPageState extends State<NowPlayingPage>
                     top: 32,
                     left: 24,
                     right: 24,
-                    bottom: 16,
+                    bottom: 10,
                   ),
                   child: _progressBar(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 25,
+                    left: 24,
+                    right: 24,
+                    bottom: 2,
+                  ),
+                  child: _mediaButtons(),
                 ),
               ],
             ),
           ),
         ));
+  }
+
+  Widget _mediaButtons() {
+    return SizedBox(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          MediaButtonControl(
+              function: null,
+              icon: Icons.shuffle,
+              color: Colors.deepPurple,
+              size: 24),
+          MediaButtonControl(
+              function: null,
+              icon: Icons.skip_previous,
+              color: Colors.deepPurple,
+              size: 36),
+          MediaButtonControl(
+              function: null,
+              icon: Icons.play_arrow_outlined,
+              color: Colors.deepPurple,
+              size: 48),
+          MediaButtonControl(
+              function: null,
+              icon: Icons.skip_next,
+              color: Colors.deepPurple,
+              size: 36),
+          MediaButtonControl(
+              function: null,
+              icon: Icons.repeat,
+              color: Colors.deepPurple,
+              size: 24),
+        ],
+      ),
+    );
   }
 
   StreamBuilder<DurationState> _progressBar() {
@@ -170,5 +214,35 @@ class _NowPlayingPageState extends State<NowPlayingPage>
             total: total,
           );
         });
+  }
+}
+
+class MediaButtonControl extends StatefulWidget {
+  const MediaButtonControl({
+    super.key,
+    required this.function,
+    required this.icon,
+    required this.color,
+    required this.size,
+  });
+
+  final void Function()? function;
+  final IconData icon;
+  final double? size;
+  final Color? color;
+
+  @override
+  State<StatefulWidget> createState() => _MediaButtonControlState();
+}
+
+class _MediaButtonControlState extends State<MediaButtonControl> {
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      onPressed: widget.function,
+      icon: Icon(widget.icon),
+      iconSize: widget.size,
+      color: widget.color ?? Theme.of(context).colorScheme.primary,
+    );
   }
 }
