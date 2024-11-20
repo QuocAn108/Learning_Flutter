@@ -228,3 +228,6 @@ class _SongItemSection extends StatelessWidget {
     );
   }
 }
+//flutter pub add just_audio
+//flutter pub add rxdart
+//flutter pub add audio_video_progress_bar
