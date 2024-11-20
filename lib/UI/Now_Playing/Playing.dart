@@ -25,7 +25,19 @@ class NowPlayingPage extends StatefulWidget {
   State<NowPlayingPage> createState() => _NowPlayingPageState();
 }
 
-class _NowPlayingPageState extends State<NowPlayingPage> {
+class _NowPlayingPageState extends State<NowPlayingPage>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _imageAnimController;
+
+  @override
+  void initState() {
+    super.initState();
+    _imageAnimController = AnimationController(
+      vsync: this,
+      duration: const Duration(microseconds: 12000),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // return const Scaffold(
@@ -33,6 +45,9 @@ class _NowPlayingPageState extends State<NowPlayingPage> {
     //     child: Text('Now Playing'),
     //   ),
     // );
+    final screenWidth = MediaQuery.of(context).size.width;
+    const delta = 64;
+    final radius = (screenWidth - delta) / 2;
     return CupertinoPageScaffold(
         navigationBar: CupertinoNavigationBar(
           middle: Text(
@@ -51,7 +66,27 @@ class _NowPlayingPageState extends State<NowPlayingPage> {
                 const Text('_ ___ _'),
                 const SizedBox(
                   height: 48,
-                )
+                ),
+                RotationTransition(
+                  turns:
+                      Tween(begin: 0.0, end: 1.0).animate(_imageAnimController),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(radius),
+                    child: FadeInImage.assetNetwork(
+                      placeholder: 'assets/icon.png',
+                      image: widget.playingSong.image,
+                      width: screenWidth - delta,
+                      height: screenWidth - delta,
+                      imageErrorBuilder: (context, error, stackTrace) {
+                        return Image.asset(
+                          'assets/icon.png',
+                          width: screenWidth - delta,
+                          height: screenWidth - delta,
+                        );
+                      },
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
