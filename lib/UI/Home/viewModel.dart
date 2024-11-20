@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:music_app_flutter/Data/Model/song.dart';
-import 'package:music_app_flutter/Data/Repository/Repository.dart';
+import 'package:music_app_flutter/Data/Repository/repository.dart';
 
 class MusicAppViewModel {
   StreamController<List<Songs>> songStream = StreamController();

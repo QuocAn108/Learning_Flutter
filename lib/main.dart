@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:music_app_flutter/Data/Repository/Repository.dart';
+import 'package:music_app_flutter/Data/Repository/repository.dart';
 import 'package:music_app_flutter/UI/Home/home.dart';
 
 void main() async {
@@ -22,5 +22,3 @@ void main() async {
 //     return const Placeholder();
 //   }
 // }
-
-
