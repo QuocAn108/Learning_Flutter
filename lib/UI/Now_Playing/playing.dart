@@ -167,6 +167,12 @@ class _NowPlayingPageState extends State<NowPlayingPage>
         ));
   }
 
+  @override
+  void dispose() {
+    _audioPlayerManager.dispose();
+    super.dispose();
+  }
+
   Widget _mediaButtons() {
     return SizedBox(
       child: Row(
