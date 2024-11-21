@@ -34,12 +34,11 @@ class _NowPlayingPageState extends State<NowPlayingPage>
   late AudioPlayerManager _audioPlayerManager;
   late int _selectedItemIndex;
   late Songs _song;
-  late double _currentAnimPosition;
+  late double _currentAnimPosition = 0.0;
 
   @override
   void initState() {
     super.initState();
-    _currentAnimPosition = 0.0;
     _song = widget.playingSong;
     _imageAnimController = AnimationController(
       vsync: this,
@@ -241,6 +240,7 @@ class _NowPlayingPageState extends State<NowPlayingPage>
           final playing = playState?.playing;
           if (processingState == ProcessingState.loading ||
               processingState == ProcessingState.buffering) {
+            _pauseRotationAnim();
             return Container(
               margin: const EdgeInsets.all(8),
               width: 48,
@@ -251,32 +251,30 @@ class _NowPlayingPageState extends State<NowPlayingPage>
             return MediaButtonControl(
                 function: () {
                   _audioPlayerManager.player.play();
-                  _imageAnimController.forward(from: _currentAnimPosition);
-                  _imageAnimController.repeat();
                 },
                 icon: Icons.play_arrow_outlined,
                 color: null,
                 size: 48);
           } else if (processingState != ProcessingState.completed) {
+            _playRotationAnim();
             return MediaButtonControl(
                 function: () {
                   _audioPlayerManager.player.pause();
-                  _imageAnimController.stop();
-                  _currentAnimPosition = _imageAnimController.value;
+                  _pauseRotationAnim();
                 },
                 icon: Icons.pause,
                 color: null,
                 size: 48);
           } else {
             if (processingState == ProcessingState.completed) {
-              _imageAnimController.stop();
-              _currentAnimPosition = 0.0;
+              _stopRotationAnim();
+              _resetRotationAnim();
             }
             return MediaButtonControl(
                 function: () {
-                  _imageAnimController.forward(from: _currentAnimPosition);
-                  _imageAnimController.repeat();
                   _audioPlayerManager.player.seek(Duration.zero);
+                  _resetRotationAnim();
+                  _playRotationAnim();
                 },
                 icon: Icons.replay,
                 color: null,
@@ -291,6 +289,7 @@ class _NowPlayingPageState extends State<NowPlayingPage>
     _audioPlayerManager.updateSongUrl(nextSong.source);
     setState(() {
       _song = nextSong;
+      _resetRotationAnim();
     });
   }
 
@@ -300,7 +299,27 @@ class _NowPlayingPageState extends State<NowPlayingPage>
     _audioPlayerManager.updateSongUrl(prevSong.source);
     setState(() {
       _song = prevSong;
+      _resetRotationAnim();
     });
+  }
+
+  void _playRotationAnim() {
+    _imageAnimController.forward(from: _currentAnimPosition);
+    _imageAnimController.repeat();
+  }
+
+  void _pauseRotationAnim() {
+    _stopRotationAnim();
+    _currentAnimPosition = _imageAnimController.value;
+  }
+
+  void _stopRotationAnim() {
+    _imageAnimController.stop();
+  }
+
+  void _resetRotationAnim() {
+    _currentAnimPosition = 0.0;
+    _imageAnimController.value = _currentAnimPosition;
   }
 }
 
