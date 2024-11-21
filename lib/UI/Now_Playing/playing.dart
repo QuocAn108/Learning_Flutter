@@ -215,6 +215,12 @@ class _NowPlayingPageState extends State<NowPlayingPage>
           return ProgressBar(
             progress: progress,
             total: total,
+            buffered: buffered,
+            onSeek: _audioPlayerManager.player.seek,
+            barHeight: 5,
+            // bufferedBarColor: Colors.amberAccent, //color of time
+            // progressBarColor: Colors.red, //color of time was playing
+            // thumbGlowColor: Colors.red, //color when you raise buffer or click
           );
         });
   }
