@@ -49,8 +49,12 @@ class _NowPlayingPageState extends State<NowPlayingPage>
       duration: const Duration(microseconds: 12000000),
     );
     _audioPlayerManager = AudioPlayerManager();
-    _audioPlayerManager.updateSongUrl(_song.source);
-    _audioPlayerManager.init();
+    if (_audioPlayerManager.songUrl.compareTo(_song.source) != 0) {
+      _audioPlayerManager.updateSongUrl(_song.source);
+      _audioPlayerManager.prepare(isNewSong: true);
+    } else {
+      _audioPlayerManager.prepare(isNewSong: false);
+    }
     _selectedItemIndex = widget.songs.indexOf(widget.playingSong);
     _loopMode = LoopMode.off;
   }
