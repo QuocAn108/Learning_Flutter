@@ -48,8 +48,8 @@ class _NowPlayingPageState extends State<NowPlayingPage>
       vsync: this,
       duration: const Duration(microseconds: 12000000),
     );
-    _audioPlayerManager =
-        AudioPlayerManager(songUrl: widget.playingSong.source);
+    _audioPlayerManager = AudioPlayerManager();
+    _audioPlayerManager.updateSongUrl(_song.source);
     _audioPlayerManager.init();
     _selectedItemIndex = widget.songs.indexOf(widget.playingSong);
     _loopMode = LoopMode.off;
@@ -179,7 +179,6 @@ class _NowPlayingPageState extends State<NowPlayingPage>
 
   @override
   void dispose() {
-    _audioPlayerManager.dispose();
     _imageAnimController.dispose();
     super.dispose();
   }
